@@ -4,20 +4,20 @@ using namespace std;
 enum STATE {
 	OK, BAD_INIT, BAD_DIV
 };
-class Vec
+class VectorDouble
 {
 	double* vec;
 	int state = OK;
 	int size;
 	static int count;
 public:
-	Vec()
+	VectorDouble()
 	{
 		size = 1;
 		vec = new double[1] {0};
 		count++;
 	}   // 	 конструктор без параметрів
-	Vec(int c)
+	VectorDouble(int c)
 	{
 		if (c > 0)
 		{
@@ -29,7 +29,7 @@ public:
 		else state = BAD_INIT;
 		size = 0;
 	}
-	Vec(int c, double n)
+	VectorDouble(int c, double n)
 	{
 		state = OK;
 		size = c;
@@ -40,21 +40,21 @@ public:
 		}
 		count++;
 	}
-	Vec(int a, double* v);
-	~Vec() {
+	VectorDouble(int a, double* v);
+	~VectorDouble() {
 		count--;
 		if (vec != NULL)
 			delete[]vec;
 	}
-	Vec(const Vec&);
-	Vec Add(Vec& d);
-	Vec Sub(Vec& d);
-	Vec Mul(double d);
-	Vec Div(double d);
+	VectorDouble(const VectorDouble&);
+	VectorDouble Add(VectorDouble& d);
+	VectorDouble Sub(VectorDouble& d);
+	VectorDouble Mul(double d);
+	VectorDouble Div(double d);
 	void Input();   //  !!! Без первантаження операцій    
-	void Output();  //  !!! Без первантаження операцій
+	void Output() const;  //  !!! Без первантаження операцій
 	static int getCount() {
-		if (count <= 0) cout << " Немає об'єктів Vec ";
+		if (count <= 0) cout << " Немає об'єктів VectorDouble ";
 		return count;
 	}
 	int getState() { return state; }
@@ -77,7 +77,7 @@ public:
 			state = BAD_INIT;
 		}
 	}
-	bool Equals(const Vec& s)
+	bool Equals(const VectorDouble& s)
 	{
 		if (size != s.size)return false;
 		for (int i = 0; i < size; i++)
@@ -86,7 +86,7 @@ public:
 		}
 		return true;
 	}
-	int Compare(const Vec& s)
+	int Compare(const VectorDouble& s)
 	{
 		if (size != s.size)
 		{
@@ -110,30 +110,31 @@ public:
 	static void* operator new(size_t a)
 	{
 		cout << endl << "Operator new worked" << endl;
-		Vec temp = Vec(a);
+		VectorDouble temp = VectorDouble(a);
 		return &temp;
 	}
-	Vec operator-();
-	Vec& operator=(const Vec&);
+	VectorDouble operator-();
+	VectorDouble& operator=(const VectorDouble&);
 	bool operator!();
-	Vec& operator++();
-	Vec& operator--();
-	Vec operator++(int);
-	Vec operator--(int);
+	VectorDouble& operator++();
+	VectorDouble& operator--();
+	VectorDouble operator++(int);
+	VectorDouble operator--(int);
 	double& operator[](int);
 	double operator()();
-	Vec operator+(Vec);
-	Vec operator-(Vec);
-	Vec operator*(double);
-	Vec operator/(double);
-	Vec operator%(int);
-	Vec& operator+=(Vec);
-	Vec& operator-=(Vec);
-	Vec& operator*=(double);
-	Vec& operator/=(double);
-	Vec& operator%=(int);
+	VectorDouble operator+(VectorDouble);
+	VectorDouble operator-(VectorDouble);
+	VectorDouble operator*(double);
+	VectorDouble operator/(double);
+	VectorDouble operator%(int);
+	VectorDouble& operator+=(VectorDouble);
+	VectorDouble& operator-=(VectorDouble);
+	VectorDouble& operator*=(double);
+	VectorDouble& operator/=(double);
+	VectorDouble& operator%=(int);
+	friend ostream& operator<<(ostream&, const VectorDouble&);
 };
-Vec::Vec(const Vec& s) {
+VectorDouble::VectorDouble(const VectorDouble& s) {
 	//if (this == &s) return; //  // the expression is used in the old standard
 	state = OK;
 	size = s.size;
@@ -144,7 +145,7 @@ Vec::Vec(const Vec& s) {
 	}
 	count++;
 };
-Vec::Vec(int a, double* b) {
+VectorDouble::VectorDouble(int a, double* b) {
 	if (a > 0)
 	{
 		state = OK;
@@ -159,10 +160,10 @@ Vec::Vec(int a, double* b) {
 	else
 	{
 		state = BAD_INIT;
-		Vec();
+		VectorDouble();
 	}
 };
-void Vec::Output() {
+void VectorDouble::Output() const {
 	for (int i = 0; i < size; i++)
 	{
 		cout << vec[i] << " ";
@@ -170,10 +171,10 @@ void Vec::Output() {
 	cout << endl << "State: " << state << endl;
 }
 
-Vec Vec::Add(Vec& s) {
+VectorDouble VectorDouble::Add(VectorDouble& s) {
 	if (s.size == size)
 	{
-		Vec tmp = Vec(size);
+		VectorDouble tmp = VectorDouble(size);
 		for (int i = 0; i < size; i++)
 		{
 			tmp.vec[i] = vec[i] + s.vec[i];
@@ -183,10 +184,10 @@ Vec Vec::Add(Vec& s) {
 	return *this;
 }
 
-Vec Vec::Sub(Vec& s) {
+VectorDouble VectorDouble::Sub(VectorDouble& s) {
 	if (s.size == size)
 	{
-		Vec tmp = Vec(size);
+		VectorDouble tmp = VectorDouble(size);
 		for (int i = 0; i < size; i++)
 		{
 			tmp.vec[i] = vec[i] - s.vec[i];
@@ -195,40 +196,40 @@ Vec Vec::Sub(Vec& s) {
 	}
 	return  *this;
 }
-Vec Vec::Div(double d) {
+VectorDouble VectorDouble::Div(double d) {
 	if (d == 0) {
 		this->state = BAD_DIV;
 		cout << " Error div \n";
 		return *this;
 	}
-	Vec temp = *this;
+	VectorDouble temp = *this;
 	for (int i = 0; i < size; i++)
 	{
 		temp.vec[i] /= d;
 	}
 	return temp;
 }
-Vec Vec::Mul(double d) {
-	Vec temp = *this;
+VectorDouble VectorDouble::Mul(double d) {
+	VectorDouble temp = *this;
 	for (int i = 0; i < size; i++)
 	{
 		temp.vec[i] *= d;
 	}
 	return temp;
 }
-Vec& Vec::operator=(const Vec& s) {
+VectorDouble& VectorDouble::operator=(const VectorDouble& s) {
 	if (size != s.size)
 	{
 		if (vec) delete[] vec;
 		size = s.size;
 		vec = new double[size];
-		state = 0;
 	}
 	for (int i = 0; i < size; i++)
 		vec[i] = s.vec[i];
+	state = s.state;
 	return *this;
 }
-void Vec::Input()
+void VectorDouble::Input()
 {
 	cout << "Input " << size << " elements of vector" << endl;
 	for (int i = 0; i < size; i++)
@@ -236,80 +237,86 @@ void Vec::Input()
 		cin >> vec[i];
 	}
 }
-bool Vec::operator!() {
+bool VectorDouble::operator!() {
 
 	return size != 0;
 }
-Vec Vec::operator%(int n)
+VectorDouble VectorDouble::operator%(int n)
 {
-	Vec temp = *this;
+	if (n == 0)
+	{
+		this->state = BAD_DIV;
+		cout << " Error div \n";
+		return *this;
+	}
+	VectorDouble temp = *this;
 	for (int i = 0; i < size; i++)
 	{
 		temp[i] = (int)temp[i] % n;
 	}
 	return temp;
 }
-Vec& Vec::operator++() {
+VectorDouble& VectorDouble::operator++() {
 	for (int i = 0; i < size; i++)
 	{
 		vec[i]++;
 	}
 	return *this;
 }
-Vec& Vec::operator--() {
+VectorDouble& VectorDouble::operator--() {
 	for (int i = 0; i < size; i++)
 	{
 		vec[i]--;
 	}
 	return *this;
 }
-Vec Vec::operator++(int) {
-	Vec temp = *this;
+VectorDouble VectorDouble::operator++(int) {
+	VectorDouble temp = *this;
 	++* this;
 	return temp;
 }
-Vec Vec::operator--(int) {
-	Vec temp = *this;
+VectorDouble VectorDouble::operator--(int) {
+	VectorDouble temp = *this;
 	--* this;
 	return temp;
 }
-Vec Vec::operator-()
+VectorDouble VectorDouble::operator-()
 {
-	Vec temp = *this;
+	VectorDouble temp = *this;
 	for (int i = 0; i < size; i++)
 	{
 		temp[i] = -temp[i];
 	}
 	return temp;
 }
-bool operator==(Vec& s1, Vec& s2) {
+bool operator==(VectorDouble& s1, VectorDouble& s2) {
 
 	return s1.Equals(s2);
 }
-bool operator>(Vec& s1, Vec& s2) {
+bool operator>(VectorDouble& s1, VectorDouble& s2) {
 
 	return s1.Compare(s2) == 1;
 }
-bool operator<(Vec& s1, Vec& s2) {
+bool operator<(VectorDouble& s1, VectorDouble& s2) {
 
 	return s1.Compare(s2) == -1;
 }
-bool operator>=(Vec& s1, Vec& s2) {
+bool operator>=(VectorDouble& s1, VectorDouble& s2) {
 
 	return s1.Compare(s2) > -1;
 }
-bool operator<=(Vec& s1, Vec& s2) {
+bool operator<=(VectorDouble& s1, VectorDouble& s2) {
 
 	return s1.Compare(s2) < 1;
 }
-double& Vec::operator[](int i) {
+double& VectorDouble::operator[](int i) {
 
 	if (i >= 0 && i < size)
 		return vec[i];
 	state = BAD_INIT;
 	return vec[max(size - 1, 0)];
 }
-double Vec::operator()() {
+double VectorDouble::operator()() {
 	double abs = 0;
 	for (int i = 0; i < size; i++)
 	{
@@ -317,42 +324,50 @@ double Vec::operator()() {
 	}
 	return sqrt(abs);
 }
-Vec Vec::operator+(Vec a)
+VectorDouble VectorDouble::operator+(VectorDouble a)
 {
 	return Add(a);
 }
-Vec Vec::operator-(Vec a)
+VectorDouble VectorDouble::operator-(VectorDouble a)
 {
 	return Sub(a);
 }
-Vec Vec::operator*(double a)
+VectorDouble VectorDouble::operator*(double a)
 {
 	return Mul(a);
 }
-Vec Vec::operator/(double  a)
+VectorDouble VectorDouble::operator/(double  a)
 {
 	return Div(a);
 }
-Vec& Vec::operator+=(Vec a)
+VectorDouble& VectorDouble::operator+=(VectorDouble a)
 {
 	return *this = Add(a);
 }
-Vec& Vec::operator-=(Vec a)
+VectorDouble& VectorDouble::operator-=(VectorDouble a)
 {
 	return *this = Sub(a);
 }
-Vec& Vec::operator*=(double a)
+VectorDouble& VectorDouble::operator*=(double a)
 {
 	return *this = Mul(a);
 }
-Vec& Vec::operator/=(double  a)
+VectorDouble& VectorDouble::operator/=(double  a)
 {
-	Vec temp = Div(a);
-	return this->operator=(Div(a));
+	Div(a);
+	return * this = (Div(a));
 }
-Vec& Vec::operator%=(int n)
+VectorDouble& VectorDouble::operator%=(int n)
 {
-	Vec temp = *this % n;
-	return this->operator=(temp);
+	return *this= (*this % n);
 }
-int Vec::count = 0;
+ostream& operator<<(ostream& os,const VectorDouble& v)
+{
+	for (int i = 0; i < v.size; i++)
+	{
+		os << v.vec[i] << " ";
+	}
+	os << endl << "State: " << v.state << endl;
+	return os;
+}
+int VectorDouble::count = 0;
