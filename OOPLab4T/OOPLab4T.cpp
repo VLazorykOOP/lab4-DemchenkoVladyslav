@@ -16,7 +16,7 @@ int main()
     //  Головне меню завдань
     //  Функції та класи можуть знаходитись в інших файлах проекту
 
-    int chain = 1;
+    int chain = 2;
     if (chain == 1) chain = mainExample1();
     if (chain == 2) chain = mainExample2();
     if (chain == 3) chain = mainExample3();

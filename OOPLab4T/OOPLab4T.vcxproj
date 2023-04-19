@@ -139,10 +139,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DomensIP.cpp" />
     <ClCompile Include="Lab4Exmaple.cpp" />
     <ClCompile Include="OOPLab4T.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DomensIP.h" />
     <ClInclude Include="Lab4Exmaple.h" />
     <ClInclude Include="VectorDouble.h" />
   </ItemGroup>

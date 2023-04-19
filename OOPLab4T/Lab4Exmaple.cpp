@@ -4,7 +4,7 @@
 #include "ComplexMatrix.h"
 #include "MyAssoc.h"
 #include "VectorDouble.h"
-
+#include "DomensIP.h"
 
 
 int mainExample1() {
@@ -34,6 +34,11 @@ int mainExample1() {
 }
 
 int mainExample2() {
+	DomensIP DIP = DomensIP();
+	DIP.Add("Valto", "192.168.0.0");
+	DIP.Show();
+	DIP.Pop();
+	DIP.Show();
 	return 3;
 }
 int mainExample3() {
