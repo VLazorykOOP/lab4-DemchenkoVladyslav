@@ -100,9 +100,21 @@ public:
 				return IPs[i];
 			}
 		}
+
 		CodeError = "Wrong index";
 	}
 	string& operator()(string index) {
 		return (*this)[index];
 	}
+	friend ostream& operator<<(ostream&, const DomensIP&);
 };
+//Error
+ ostream& operator<<(ostream& os, const DomensIP& v)
+{
+	for (int i = 0; i < v.size; i++)
+	{
+		os << v.Domens[i] << " " << v.IPs[i] << endl;
+	}
+	os << endl << "CodeError: " << v.CodeError << endl;
+	return os;
+}
