@@ -47,12 +47,6 @@ public:
 			delete[]vec;
 	}
 	VectorDouble(const VectorDouble&);
-	VectorDouble Add(VectorDouble& d);
-	VectorDouble Sub(VectorDouble& d);
-	VectorDouble Mul(double d);
-	VectorDouble Div(double d);
-	void Input();   //  !!! Без первантаження операцій    
-	void Output() const;  //  !!! Без первантаження операцій
 	static int getCount() {
 		if (count <= 0) cout << " Немає об'єктів VectorDouble ";
 		return count;
@@ -133,9 +127,16 @@ public:
 	VectorDouble& operator/=(double);
 	VectorDouble& operator%=(int);
 	friend ostream& operator<<(ostream&, const VectorDouble&);
+	friend istream& operator>>(istream&, VectorDouble&);
+	VectorDouble Add(VectorDouble& d);
+	VectorDouble Sub(VectorDouble& d);
+	VectorDouble Mul(double d);
+	VectorDouble Div(double d);
+	void Input();
+	void Output() const;
+
 };
 VectorDouble::VectorDouble(const VectorDouble& s) {
-	//if (this == &s) return; //  // the expression is used in the old standard
 	state = OK;
 	size = s.size;
 	vec = new double[size];
@@ -163,14 +164,6 @@ VectorDouble::VectorDouble(int a, double* b) {
 		VectorDouble();
 	}
 };
-void VectorDouble::Output() const {
-	for (int i = 0; i < size; i++)
-	{
-		cout << vec[i] << " ";
-	}
-	cout << endl << "State: " << state << endl;
-}
-
 VectorDouble VectorDouble::Add(VectorDouble& s) {
 	if (s.size == size)
 	{
@@ -237,6 +230,14 @@ void VectorDouble::Input()
 		cin >> vec[i];
 	}
 }
+void VectorDouble::Output() const {
+	for (int i = 0; i < size; i++)
+	{
+		cout << vec[i] << " ";
+	}
+	cout << endl << "State: " << state << endl;
+}
+
 bool VectorDouble::operator!() {
 
 	return size != 0;
@@ -355,13 +356,13 @@ VectorDouble& VectorDouble::operator*=(double a)
 VectorDouble& VectorDouble::operator/=(double  a)
 {
 	Div(a);
-	return * this = (Div(a));
+	return *this = (Div(a));
 }
 VectorDouble& VectorDouble::operator%=(int n)
 {
-	return *this= (*this % n);
+	return *this = (*this % n);
 }
-ostream& operator<<(ostream& os,const VectorDouble& v)
+ostream& operator<<(ostream& os, const VectorDouble& v)
 {
 	for (int i = 0; i < v.size; i++)
 	{
@@ -369,5 +370,22 @@ ostream& operator<<(ostream& os,const VectorDouble& v)
 	}
 	os << endl << "State: " << v.state << endl;
 	return os;
+}
+istream& operator>>(istream& is, VectorDouble& v)
+{
+	cout << "Enter size of vector" << endl;
+	is >> v.size;
+	if (v.vec)
+		delete[] v.vec;
+	if (v.size <= 0)
+		v.state = BAD_INIT;
+	v.size = max(v.size, 1);
+	v.vec = new double(v.size);
+	cout << "Enter " << v.size << " elements of vector" << endl;
+	for (int i = 0; i < v.size; i++)
+	{
+		is >> v.vec[i];
+	}
+	return is;
 }
 int VectorDouble::count = 0;
