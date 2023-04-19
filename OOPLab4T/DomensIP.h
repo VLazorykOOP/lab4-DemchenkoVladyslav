@@ -15,6 +15,12 @@ public:
 		IPs = new string[1];
 		maxSize = 1;
 	}
+	DomensIP(int n)
+	{
+		Domens = new string[n];
+		IPs = new string[n];
+		maxSize =n;
+	}
 	DomensIP(int s, string* D, string* I)
 	{
 		Domens = new string[s];
@@ -102,19 +108,12 @@ public:
 		}
 
 		CodeError = "Wrong index";
+		return CodeError;
 	}
 	string& operator()(string index) {
 		return (*this)[index];
 	}
 	friend ostream& operator<<(ostream&, const DomensIP&);
+	friend istream& operator>>(istream&, DomensIP&);
+
 };
-//Error
- ostream& operator<<(ostream& os, const DomensIP& v)
-{
-	for (int i = 0; i < v.size; i++)
-	{
-		os << v.Domens[i] << " " << v.IPs[i] << endl;
-	}
-	os << endl << "CodeError: " << v.CodeError << endl;
-	return os;
-}

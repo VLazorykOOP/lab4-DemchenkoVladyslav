@@ -35,13 +35,16 @@ int mainExample1() {
 
 int mainExample2() {
 	DomensIP DIP = DomensIP();
-	cout << "DPI" << endl;
+	cout << "Enter DIP (>> operator override)" << endl;
+	cin >> DIP;
+	cout << "Added elements:" << endl;
 	DIP.Add("Valto", "192.168.0.0");
 	DIP.Add("Shulcek", "192.168.0.1");
 	DIP.Show();
 	cout << "DPI[\"Valto\"] = " << DIP["Valto"] << endl;
-	cout << "DPI(\"Shulcek\") = " << DIP["Shulcek"] << endl;
+	cout << "DPI(\"Shulcek\") = " << DIP("Shulcek") << endl;
 	cout << "DPI(\"asdasdasd\") = " << DIP("asdasdasd") << endl;
+	cout << "DIP (<< operator override):" << endl;
 	cout << DIP;
 	//виконане 2 завдання
 	return 3;
